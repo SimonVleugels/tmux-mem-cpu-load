@@ -30,7 +30,7 @@ std::string get_graph_by_percentage( unsigned value, unsigned len )
 
   for( ; step < bar_count; step++ )
   {
-    bars.append( "|" );
+    bars.append( "▮" );
   }
   for( ; step < len; step++ )
   {
