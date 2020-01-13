@@ -49,6 +49,7 @@ enum MEMORY_MODE
 
 std::string mem_string( const MemoryStatus & mem_status,
   MEMORY_MODE mode = MEMORY_MODE_DEFAULT,
+  bool memory_graph = false,
   bool use_colors = false,
   bool use_powerline_left = false,
   bool use_powerline_right = false );

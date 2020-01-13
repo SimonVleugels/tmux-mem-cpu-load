@@ -126,6 +126,8 @@ void print_help()
     << "\tSet how many lines should be drawn in a graph. Default: 10\n"
     << "-m <value>, --mem-mode <value>\n"
     << "\tSet memory display mode. 0: Default, 1: Free memory, 2: Usage percent.\n"
+    << "--mem-graph\n"
+    << "\tEnable memory graph\n"
     << "-t <value>, --cpu-mode <value>\n"
     << "\tSet cpu % display mode. 0: Default max 100%, 1: Max 100% * number of threads. \n"
     << "-a <value>, --averages-count <value>\n"
@@ -141,6 +143,7 @@ int main( int argc, char** argv )
   bool use_colors = false;
   bool use_powerline_left = false;
   bool use_powerline_right = false;
+  bool memory_graph = false;
   MEMORY_MODE mem_mode = MEMORY_MODE_DEFAULT;
   CPU_MODE cpu_mode = CPU_MODE_DEFAULT;
 
@@ -157,6 +160,7 @@ int main( int argc, char** argv )
     { "interval", required_argument, NULL, 'i' },
     { "graph-lines", required_argument, NULL, 'g' },
     { "mem-mode", required_argument, NULL, 'm' },
+    { "mem-graph", no_argument, NULL, 'r'},
     { "cpu-mode", required_argument, NULL, 't' },
     { "averages-count", required_argument, NULL, 'a' },
     { 0, 0, 0, 0 } // used to handle unknown long options
@@ -207,6 +211,9 @@ int main( int argc, char** argv )
           }
         mem_mode = static_cast< MEMORY_MODE >( atoi( optarg ) );
         break;
+      case 'r': // --mem-graph
+        memory_graph = true;
+        break;
       case 't': // --cpu-mode, -t
         if( atoi( optarg ) < 0 )
           {
@@ -243,7 +250,7 @@ int main( int argc, char** argv )
 
   MemoryStatus memory_status;
   mem_status( memory_status );
-  std::cout << mem_string( memory_status, mem_mode, use_colors, use_powerline_left, use_powerline_right )
+  std::cout << mem_string( memory_status, mem_mode, memory_graph, use_colors, use_powerline_left, use_powerline_right )
     << cpu_string( cpu_mode, cpu_usage_delay, graph_lines, use_colors, use_powerline_left, use_powerline_right )
     << load_string( use_colors, use_powerline_left, use_powerline_right, averages_count );
 
