@@ -28,7 +28,8 @@ std::string mem_string( const MemoryStatus & mem_status,
   bool memory_graph,
   bool use_colors,
   bool use_powerline_left,
-  bool use_powerline_right )
+  bool use_powerline_right,
+  bool add_tags)
 {
   std::ostringstream oss;
   // Change the percision for floats, for a pretty output
@@ -57,6 +58,11 @@ std::string mem_string( const MemoryStatus & mem_status,
     }
   }
 
+  if ( add_tags )
+  {
+    oss << "MEM:";
+  }
+
   switch( mode )
   {
   case MEMORY_MODE_FREE_MEMORY: // Show free memory in MB or GB
@@ -82,14 +88,12 @@ std::string mem_string( const MemoryStatus & mem_status,
     const float percentage_mem = mem_status.used_mem /
       static_cast<float>( mem_status.total_mem ) * 100.0;
 
-    oss << percentage_mem << '%'
-      << " ";
+    oss << percentage_mem << '%';
     break;
     }
   default: // Default mode, just show the used/total memory in MB
     oss << static_cast< unsigned int >( mem_status.used_mem ) << '/'
-      << static_cast< unsigned int >( mem_status.total_mem ) << "MB"
-      << " ";
+      << static_cast< unsigned int >( mem_status.total_mem ) << "MB";
   }
 
   if ( memory_graph )
@@ -97,8 +101,8 @@ std::string mem_string( const MemoryStatus & mem_status,
     const float percentage_mem = mem_status.used_mem /
       static_cast<float>( mem_status.total_mem ) * 100.0;
 
-    oss << mem_graph_lut[(int) percentage_mem]
-      << " ";
+    oss << " ";
+    oss << mem_graph_lut[(int) percentage_mem];
   }
 
   if( use_colors )

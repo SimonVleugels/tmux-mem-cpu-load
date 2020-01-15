@@ -52,6 +52,7 @@ std::string mem_string( const MemoryStatus & mem_status,
   bool memory_graph = false,
   bool use_colors = false,
   bool use_powerline_left = false,
-  bool use_powerline_right = false );
+  bool use_powerline_right = false,
+  bool add_tags = false);
 
 #endif

@@ -37,7 +37,7 @@
 
 std::string cpu_string( CPU_MODE cpu_mode, unsigned int cpu_usage_delay, unsigned int graph_lines,
     bool use_colors = false,
-    bool use_powerline_left = false, bool use_powerline_right = false )
+    bool use_powerline_left = false, bool use_powerline_right = false, bool add_tags = false)
 {
 
   float percentage;
@@ -78,6 +78,10 @@ std::string cpu_string( CPU_MODE cpu_mode, unsigned int cpu_usage_delay, unsigne
     {
       powerline( oss, cpu_percentage_lut[percent], NONE );
     }
+  }
+
+  if( add_tags ) {
+    oss << "CPU:";
   }
 
   if( graph_lines > 0)
@@ -132,6 +136,8 @@ void print_help()
     << "\tSet cpu % display mode. 0: Default max 100%, 1: Max 100% * number of threads. \n"
     << "-a <value>, --averages-count <value>\n"
     << "\tSet how many load-averages should be drawn. Default: 3\n"
+    << "--tags\n"
+    << "\tAdd tags to elements"
     << endl;
 }
 
@@ -144,6 +150,7 @@ int main( int argc, char** argv )
   bool use_powerline_left = false;
   bool use_powerline_right = false;
   bool memory_graph = false;
+  bool add_tags = false;
   MEMORY_MODE mem_mode = MEMORY_MODE_DEFAULT;
   CPU_MODE cpu_mode = CPU_MODE_DEFAULT;
 
@@ -163,12 +170,13 @@ int main( int argc, char** argv )
     { "mem-graph", no_argument, NULL, 'r'},
     { "cpu-mode", required_argument, NULL, 't' },
     { "averages-count", required_argument, NULL, 'a' },
+    { "tags", no_argument, NULL, 's'},
     { 0, 0, 0, 0 } // used to handle unknown long options
   };
 
   int c;
   // while c != -1
-  while( (c = getopt_long( argc, argv, "hi:cpqg:m:a:t:", long_options, NULL) ) != -1 )
+  while( (c = getopt_long( argc, argv, "hi:cpqg:m:a:t:r:s:", long_options, NULL) ) != -1 )
   {
     switch( c )
     {
@@ -230,6 +238,9 @@ int main( int argc, char** argv )
           }
         averages_count = atoi( optarg );
         break;
+      case 's': // --tags
+        add_tags = true;
+        break;
       case '?':
         // getopt_long prints error message automatically
         return EXIT_FAILURE;
@@ -250,9 +261,9 @@ int main( int argc, char** argv )
 
   MemoryStatus memory_status;
   mem_status( memory_status );
-  std::cout << mem_string( memory_status, mem_mode, memory_graph, use_colors, use_powerline_left, use_powerline_right )
-    << cpu_string( cpu_mode, cpu_usage_delay, graph_lines, use_colors, use_powerline_left, use_powerline_right )
-    << load_string( use_colors, use_powerline_left, use_powerline_right, averages_count );
+  std::cout << mem_string( memory_status, mem_mode, memory_graph, use_colors, use_powerline_left, use_powerline_right, add_tags)
+    << cpu_string( cpu_mode, cpu_usage_delay, graph_lines, use_colors, use_powerline_left, use_powerline_right, add_tags)
+    << load_string( use_colors, use_powerline_left, use_powerline_right, averages_count, add_tags);
 
   std::cout << std::endl;
 

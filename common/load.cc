@@ -36,7 +36,7 @@
 // Load Averages
 std::string load_string( bool use_colors,
   bool use_powerline_left, bool use_powerline_right,
-  short num_averages )
+  short num_averages, bool add_tags)
 {
   std::ostringstream ss;
   double averages[num_averages];
@@ -77,7 +77,11 @@ std::string load_string( bool use_colors,
       }
     }
 
-    ss << ' ';
+    if( add_tags )
+    {
+      ss << "LOAD:";
+    }
+
     for( int i = 0; i < num_averages; ++i )
     {
       // Round to nearest, make sure this is only a 0.00 value not a 0.0000
