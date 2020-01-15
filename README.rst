@@ -26,19 +26,19 @@ The system load average is also displayed.
 
 Example output::
 
-  2885/7987MB [|||||     ]  51.2% 2.11 2.35 2.44
-
-   ^    ^          ^         ^     ^    ^    ^
-   |    |          |         |     |    |    |
-   1    2          3         4     5    6    7
+  MEM:7837/15918MB ▄  CPU:▕▮▮▮       ▕ 30.5%  LOAD:3.37 3.41 3.34
+        ^    ^     ^           ^         ^          ^    ^    ^
+        |    |     |           |         |          |    |    |
+        1    2     3           4         5          6    7    8
 
 1. Currently used memory.
 2. Available memory.
-3. CPU usage bar graph.
-4. CPU usage percentage.
-5. Load average for the past minute.
-6. Load average for the past 5 minutes.
-7. Load average for the past 15 minutes.
+3. memory usage bar graph
+4. CPU usage bar graph.
+5. CPU usage percentage.
+6. Load average for the past minute.
+7. Load average for the past 5 minutes.
+8. Load average for the past 15 minutes.
 
 For `terminals with 256 color support`_, graded colors can be displayed by
 passing the **--colors** flag.
@@ -149,12 +149,16 @@ The full usage::
           Set how many lines should be drawn in a graph. Default: 10
   -m <value>, --mem-mode <value>
         Set memory display mode. 0: Default, 1: Free memory, 2: Usage percent.
+  --mem-graph
+        Enable memory graph
   -t <value>, --cpu-mode <value>
         Set cpu % display mode. 0: Default max 100%, 1: Max 100% * number of threads.
   -a <value>, --averages-count <value>
         Set how many load-averages should be drawn. Default: 3
-
-
+  --tags
+        Add tags to elements
+  -e, --expand
+        Use expanded view (adds spaces between elements)
 
 Authors
 =======
