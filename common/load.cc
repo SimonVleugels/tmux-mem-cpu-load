@@ -36,7 +36,7 @@
 // Load Averages
 std::string load_string( bool use_colors,
   bool use_powerline_left, bool use_powerline_right,
-  short num_averages, bool add_tags)
+  short num_averages, bool add_tags, bool expand)
 {
   std::ostringstream ss;
   double averages[num_averages];
@@ -77,6 +77,11 @@ std::string load_string( bool use_colors,
       }
     }
 
+    if( expand )
+    {
+      ss << " ";
+    }
+
     if( add_tags )
     {
       ss << "LOAD:";
@@ -95,6 +100,11 @@ std::string load_string( bool use_colors,
       {
         ss << avg << " ";
       }
+    }
+
+    if( expand )
+    {
+      ss << " ";
     }
 
     if( use_colors )

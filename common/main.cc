@@ -37,7 +37,7 @@
 
 std::string cpu_string( CPU_MODE cpu_mode, unsigned int cpu_usage_delay, unsigned int graph_lines,
     bool use_colors = false,
-    bool use_powerline_left = false, bool use_powerline_right = false, bool add_tags = false)
+    bool use_powerline_left = false, bool use_powerline_right = false, bool add_tags = false, bool expand = false)
 {
 
   float percentage;
@@ -80,7 +80,12 @@ std::string cpu_string( CPU_MODE cpu_mode, unsigned int cpu_usage_delay, unsigne
     }
   }
 
-  if( add_tags ) {
+  if( expand )
+  {
+    oss << " ";
+  }
+  if( add_tags )
+  {
     oss << "CPU:";
   }
 
@@ -93,6 +98,10 @@ std::string cpu_string( CPU_MODE cpu_mode, unsigned int cpu_usage_delay, unsigne
   oss.width( 5 );
   oss << percentage * multiplier;
   oss << "%";
+  if( expand )
+  {
+    oss << " ";
+  }
   if( use_colors )
   {
     if( use_powerline_left )
@@ -137,7 +146,9 @@ void print_help()
     << "-a <value>, --averages-count <value>\n"
     << "\tSet how many load-averages should be drawn. Default: 3\n"
     << "--tags\n"
-    << "\tAdd tags to elements"
+    << "\tAdd tags to elements\n"
+    << "-e, --expand\n"
+    << "\tUse expanded view (adds spaces between elements)"
     << endl;
 }
 
@@ -151,6 +162,7 @@ int main( int argc, char** argv )
   bool use_powerline_right = false;
   bool memory_graph = false;
   bool add_tags = false;
+  bool expand = false;
   MEMORY_MODE mem_mode = MEMORY_MODE_DEFAULT;
   CPU_MODE cpu_mode = CPU_MODE_DEFAULT;
 
@@ -171,12 +183,13 @@ int main( int argc, char** argv )
     { "cpu-mode", required_argument, NULL, 't' },
     { "averages-count", required_argument, NULL, 'a' },
     { "tags", no_argument, NULL, 's'},
+    { "expand", no_argument, NULL, 'e' },
     { 0, 0, 0, 0 } // used to handle unknown long options
   };
 
   int c;
   // while c != -1
-  while( (c = getopt_long( argc, argv, "hi:cpqg:m:a:t:r:s:", long_options, NULL) ) != -1 )
+  while( (c = getopt_long( argc, argv, "hi:cpqg:m:a:t:rse", long_options, NULL) ) != -1 )
   {
     switch( c )
     {
@@ -241,6 +254,9 @@ int main( int argc, char** argv )
       case 's': // --tags
         add_tags = true;
         break;
+      case 'e': // --expand
+        expand = true;
+        break;
       case '?':
         // getopt_long prints error message automatically
         return EXIT_FAILURE;
@@ -261,9 +277,9 @@ int main( int argc, char** argv )
 
   MemoryStatus memory_status;
   mem_status( memory_status );
-  std::cout << mem_string( memory_status, mem_mode, memory_graph, use_colors, use_powerline_left, use_powerline_right, add_tags)
-    << cpu_string( cpu_mode, cpu_usage_delay, graph_lines, use_colors, use_powerline_left, use_powerline_right, add_tags)
-    << load_string( use_colors, use_powerline_left, use_powerline_right, averages_count, add_tags);
+  std::cout << mem_string( memory_status, mem_mode, memory_graph, use_colors, use_powerline_left, use_powerline_right, add_tags, expand)
+    << cpu_string( cpu_mode, cpu_usage_delay, graph_lines, use_colors, use_powerline_left, use_powerline_right, add_tags, expand)
+    << load_string( use_colors, use_powerline_left, use_powerline_right, averages_count, add_tags, expand);
 
   std::cout << std::endl;
 

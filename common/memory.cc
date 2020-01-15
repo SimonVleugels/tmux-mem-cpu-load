@@ -29,7 +29,8 @@ std::string mem_string( const MemoryStatus & mem_status,
   bool use_colors,
   bool use_powerline_left,
   bool use_powerline_right,
-  bool add_tags)
+  bool add_tags,
+  bool expand)
 {
   std::ostringstream oss;
   // Change the percision for floats, for a pretty output
@@ -56,6 +57,11 @@ std::string mem_string( const MemoryStatus & mem_status,
     {
       powerline( oss, mem_lut[color], NONE );
     }
+  }
+
+  if( expand )
+  {
+    oss << " ";
   }
 
   if ( add_tags )
@@ -103,6 +109,11 @@ std::string mem_string( const MemoryStatus & mem_status,
 
     oss << " ";
     oss << mem_graph_lut[(int) percentage_mem];
+  }
+
+  if( expand )
+  {
+    oss << " ";
   }
 
   if( use_colors )
